@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Système Verrouillé</title>
+    <style>
+        body { 
+            background-color: black; 
+            color: #00ff00; 
+            font-family: monospace; 
+            text-align: center; 
+            user-select: none;
+        }
+        .message { 
+            font-size: 24px; 
+            margin-top: 20%; 
+            animation: glitch 1s infinite;
+        }
+        .numero { 
+            font-size: 20px; 
+            color: red; 
+        }
+        @keyframes glitch {
+            0% { text-shadow: 2px 2px red; }
+            50% { text-shadow: -2px -2px blue; }
+            100% { text-shadow: 2px 2px red; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Son inquiétant -->
+    <audio id="alarmSound" autoplay loop>
+        <source src="https://www.myinstants.com/media/sounds/error.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- Message effrayant -->
+    <h1 class='message'>SYSTEM FAILURE: UNAUTHORIZED ACCESS DETECTED</h1>
+    <p class='numero'>Appelez ce numéro immédiatement : <b>06 XX XX XX XX</b></p>
+
+    <script>
+        let codeSecret = "1234";
+        let saisie = "";
+        
+        document.addEventListener("keydown", function(event) {
+            saisie += event.key;
+            if (saisie.endsWith(codeSecret)) {
+                document.body.innerHTML = "<h1 style='color: green;'>Système restauré avec succès !</h1>";
+                document.getElementById("alarmSound").pause();
+            }
+        });
+    </script>
+</body>
+</html>

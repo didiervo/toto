@@ -5,21 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Système Verrouillé</title>
     <style>
-        body { 
-            background-color: black; 
-            color: #00ff00; 
-            font-family: monospace; 
-            text-align: center; 
+        * {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
             user-select: none;
         }
-        .message { 
-            font-size: 24px; 
-            margin-top: 20%; 
+        body {
+            background-color: black;
+            color: #00ff00;
+            font-family: monospace;
+            text-align: center;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .message {
+            font-size: 24px;
             animation: glitch 1s infinite;
         }
-        .numero { 
-            font-size: 20px; 
-            color: red; 
+        .numero {
+            font-size: 20px;
+            color: red;
         }
         @keyframes glitch {
             0% { text-shadow: 2px 2px red; }
@@ -28,7 +37,8 @@
         }
     </style>
 </head>
-<body>
+<body onload="goFullScreen()">
+
     <!-- Son inquiétant -->
     <audio id="alarmSound" autoplay loop>
         <source src="https://www.myinstants.com/media/sounds/error.mp3" type="audio/mpeg">
@@ -41,12 +51,42 @@
     <script>
         let codeSecret = "1234";
         let saisie = "";
-        
+
+        // Passer en mode plein écran dès le chargement de la page
+        function goFullScreen() {
+            let docElm = document.documentElement;
+            if (docElm.requestFullscreen) {
+                docElm.requestFullscreen();
+            } else if (docElm.mozRequestFullScreen) { // Firefox
+                docElm.mozRequestFullScreen();
+            } else if (docElm.webkitRequestFullscreen) { // Chrome, Safari, Opera
+                docElm.webkitRequestFullscreen();
+            } else if (docElm.msRequestFullscreen) { // IE/Edge
+                docElm.msRequestFullscreen();
+            }
+        }
+
+        // Désactiver la souris
+        document.addEventListener("mousemove", function(event) {
+            event.preventDefault();
+        });
+
+        document.addEventListener("contextmenu", function(event) {
+            event.preventDefault();
+        });
+
+        // Désactiver toutes les touches sauf le pavé numérique
         document.addEventListener("keydown", function(event) {
-            saisie += event.key;
-            if (saisie.endsWith(codeSecret)) {
-                document.body.innerHTML = "<h1 style='color: green;'>Système restauré avec succès !</h1>";
-                document.getElementById("alarmSound").pause();
+            let allowedKeys = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+           
+            if (allowedKeys.includes(event.key)) {
+                saisie += event.key;
+                if (saisie.endsWith(codeSecret)) {
+                    document.body.innerHTML = "<h1 style='color: green;'>Système restauré avec succès !</h1>";
+                    document.getElementById("alarmSound").pause();
+                }
+            } else {
+                event.preventDefault();
             }
         });
     </script>
